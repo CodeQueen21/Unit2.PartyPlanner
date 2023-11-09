@@ -5,30 +5,8 @@
 //     date: "2021-09-30T00:00:00.000Z", // Date ISO string
 //     location: "123 Street"
 //   }
-
-const parties = [
-    {
-            id: 1,
-            name: "Event Name",
-            description: "This is a description of the event.",
-            date: "2021-09-30T00:00:00.000Z", // Date ISO string
-            location: "123 Street"
-    },
-    {
-        id: 1,
-        name: "Event Name",
-        description: "This is a description of the event.",
-        date: "2021-09-30T00:00:00.000Z", // Date ISO string
-        location: "123 Street"
-},
-{
-    id: 1,
-    name: "Event Name",
-    description: "This is a description of the event.",
-    date: "2021-09-30T00:00:00.000Z", // Date ISO string
-    location: "123 Street"
-},
-]
+const BASE_URL = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2308-acc-et-web-pt-b';
+const EVENTS = `${BASE_URL}/events`;
 
 
 
@@ -53,6 +31,29 @@ function createPartyCard(title, date, address, description) {
     PARTY_CARDS.append(PARTY_CARD);
 };
 
-for(const party of parties) {
-    createPartyCard(party.name, party.date, party.location, party.description);
+function renderPartyCards(parties) {
+    for(const party of parties) {
+        createPartyCard(party.name, party.date, party.location, party.description);
+    }
 }
+
+async function fetchEvents() {
+    try {
+        //pausing to get a response
+        //error for their computer
+        const response = await fetch(EVENTS);
+        if(!response.ok) {
+            console.log('API error', response.status)
+            return
+        }
+        const jsonResponse = await response.json();
+        console.log(jsonResponse);
+        const parties = jsonResponse.data;
+        renderPartyCards(parties);
+    } catch (err) {
+        //error for our computer
+       console.error(err);
+    }
+}
+
+fetchEvents()
