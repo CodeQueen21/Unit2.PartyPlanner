@@ -6,33 +6,11 @@
 //     location: "123 Street"
 //   }
 
-{/* <form id="partyForm" method="POST">
-      <input
-        type="text"
-        name="partyName"
-        id="partyName"
-        placeholder="Party Name"
-        required
-      />
-      <input type="date" id="partyDate" required />
-      <input type="time" id="partyTime" required />
-      <input type="text" id="partyLocation" placeholder="Location required" />
-      <textarea
-        name=""
-        id="partyDescription"
-        placeholder="Party Description"
-        cols="5"
-        rows="5"
-        required
-      ></textarea>
-      <button type="submit">Schedule Party</button>
-    </form> */}
-
 const BASE_URL = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2308-acc-et-web-pt-b';
 const EVENTS = `${BASE_URL}/events`;
 
 const FORM = document.querySelector('form');
-
+const PARTY_CARDS = document.querySelector("#cards");
 //**ask about async function usage here
 
 FORM.addEventListener('submit' , async function(event) {
@@ -57,7 +35,8 @@ FORM.addEventListener('submit' , async function(event) {
 })
 
 function createPartyCard(title, date, address, description, id) {
-    const PARTY_CARDS = document.querySelector("#cards");
+    
+
     const PARTY_CARD =  document.createElement("div");
     PARTY_CARD.classList.add('card')
     const PARTY_CARD_TITLE = document.createElement("h2");
@@ -77,20 +56,15 @@ function createPartyCard(title, date, address, description, id) {
 
     DELETE_BUTTON.addEventListener('click', async () => {
         await deleteEvent(id);
-        setTimeout(() => {
-            fetchEvents();
-            console.log('refresh')
-        }, 1000);
-        console.log(`should delete ${id}`);
-        
-
-    })
+       fetchEvents();
+})
     
     PARTY_CARD.append(PARTY_CARD_TITLE, PARTY_CARD_DATE, PARTY_CARD_ADDRESS, PARTY_CARD_DESCRIPTION, DELETE_BUTTON);
     PARTY_CARDS.append(PARTY_CARD);
 };
 
 function renderPartyCards(parties) {
+    PARTY_CARDS.innerHTML = '';
     for(const party of parties) {
         createPartyCard(party.name, party.date, party.location, party.description, party.id);
     }
@@ -110,8 +84,9 @@ async function fetchEvents() {
         }
         const jsonResponse = await response.json();
         const parties = jsonResponse.data;
+
         renderPartyCards(parties);
-        console.log(`should update`);
+        console.log(`should update`, parties);
     } catch (err) {
         //error for our computer
        console.error(err);
