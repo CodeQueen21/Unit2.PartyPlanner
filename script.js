@@ -84,9 +84,9 @@ async function fetchEvents() {
         }
         const jsonResponse = await response.json();
         const parties = jsonResponse.data;
-
+        console.log(parties);
         renderPartyCards(parties);
-        console.log(`should update`, parties);
+        //console.log(`should update`, parties);
     } catch (err) {
         //error for our computer
        console.error(err);
